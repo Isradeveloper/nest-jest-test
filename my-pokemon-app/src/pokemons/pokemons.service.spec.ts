@@ -17,13 +17,13 @@ describe('PokemonsService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should create a pokemon', () => {
+  it('should create a pokemon', async () => {
     const newPokemon = {
       name: 'Pikachu',
       type: 'Electric',
     };
 
-    const result = service.create(newPokemon);
+    const result = await service.create(newPokemon);
 
     expect(result).toBe(`This action adds a ${newPokemon.name}`);
   });
@@ -59,6 +59,22 @@ describe('PokemonsService', () => {
 
     expect(pokemons).toBeInstanceOf(Array);
     expect(pokemons).toHaveLength(10);
-    expect(service.paginatedPokemonsCache).toHaveProperty('10-1');
+
+    expect(service.paginatedPokemonsCache.has('10-1')).toBeTruthy();
+    expect(service.paginatedPokemonsCache.get('10-1')).toBe(pokemons);
+  });
+
+  it('should check properties of the pokemon', async () => {
+    const id = 4;
+    const pokemon = await service.findOne(id);
+    expect(pokemon).toHaveProperty('id');
+
+    expect(pokemon).toEqual(
+      expect.objectContaining({
+        id: id,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        hp: expect.any(Number),
+      }),
+    );
   });
 });
