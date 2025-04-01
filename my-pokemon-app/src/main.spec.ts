@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { NestFactory } from '@nestjs/core';
 import { bootstrap } from './main';
 import { AppModule } from './app.module';
@@ -62,11 +63,10 @@ describe('Main.ts bootstrap', () => {
     expect(mockApp.useGlobalPipes).toHaveBeenCalledWith(
       expect.objectContaining({
         errorHttpStatusCode: 400,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
         validatorOptions: expect.objectContaining({
-          whitelist: true,
           forbidNonWhitelisted: true,
-          transform: true,
+          whitelist: true,
         }),
       }),
     );
